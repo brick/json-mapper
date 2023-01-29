@@ -13,6 +13,9 @@
         <directory name="tests" />
         <ignoreFiles>
             <directory name="vendor" />
+
+            <!-- Too many on-purpose errors in this file -->
+            <file name="tests/Classes/KitchenSink.php" />
         </ignoreFiles>
     </projectFiles>
 
