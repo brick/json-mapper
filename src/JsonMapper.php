@@ -226,6 +226,12 @@ final class JsonMapper
                 return $jsonValue;
             }
 
+            foreach ($parameterType->enumTypes as $enumType) {
+                if ($enumType->isStringBacked) {
+                    return ($enumType->name)::from($jsonValue);
+                }
+            }
+
             // TODO "Parameter %s of class %s does not accept string" + JSON path
             throw new JsonMapperException('Property ' . $jsonPropertyName . ' cannot be a string.');
         }
@@ -233,6 +239,12 @@ final class JsonMapper
         if (is_int($jsonValue)) {
             if ($parameterType->allowsInt) {
                 return $jsonValue;
+            }
+
+            foreach ($parameterType->enumTypes as $enumType) {
+                if ($enumType->isIntBacked) {
+                    return ($enumType->name)::from($jsonValue);
+                }
             }
 
             throw new JsonMapperException('Property ' . $jsonPropertyName . ' cannot be a string.');

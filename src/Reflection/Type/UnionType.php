@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brick\JsonMapper\Reflection\Type;
 
 use Brick\JsonMapper\JsonMapperException;
+use ReflectionClass;
 use Stringable;
 
 /**
@@ -29,12 +30,19 @@ final class UnionType implements Stringable
     public readonly array $classTypes;
 
     /**
+     * At most one enum type per backed type (int, string) is allowed in a union.
+     *
+     * @var EnumType[]
+     */
+    public readonly array $enumTypes;
+
+    /**
      * At most one ArrayType is allowed in a union.
      */
     public readonly ?ArrayType $arrayType;
 
     /**
-     * @param (SimpleType|ClassType|ArrayType)[] $types
+     * @param (SimpleType|ClassType|EnumType|ArrayType)[] $types
      *
      * @throws JsonMapperException
      */
@@ -76,6 +84,32 @@ final class UnionType implements Stringable
         $this->allowsMixed = $hasMixed;
 
         $this->classTypes = $this->filterTypes(ClassType::class);
+        $this->enumTypes = $this->filterTypes(EnumType::class);
+
+        $hasIntBackedEnum = false;
+        $hasStringBackedEnum = false;
+
+        foreach ($this->enumTypes as $enumType) {
+            if ($enumType->isIntBacked) {
+                if ($hasInt) {
+                    throw new JsonMapperException('Cannot use int-backed enum together with "int" in a union.');
+                }
+                if ($hasIntBackedEnum) {
+                    throw new JsonMapperException('At most one int-backed enum is allowed in a union.');
+                }
+                $hasIntBackedEnum = true;
+            }
+
+            if ($enumType->isStringBacked) {
+                if ($hasString) {
+                    throw new JsonMapperException('Cannot use string-backed enum together with "string" in a union.');
+                }
+                if ($hasStringBackedEnum) {
+                    throw new JsonMapperException('At most one string-backed enum is allowed in a union.');
+                }
+                $hasStringBackedEnum = true;
+            }
+        }
 
         $arrayTypes = $this->filterTypes(ArrayType::class);
 
@@ -145,7 +179,7 @@ final class UnionType implements Stringable
     {
         return array_values(array_filter(
             $this->types,
-            fn (SimpleType|ClassType|ArrayType $type) => $type instanceof $className,
+            fn (SimpleType|ClassType|EnumType|ArrayType $type) => $type instanceof $className,
         ));
     }
 

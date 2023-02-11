@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace Brick\JsonMapper\Reflection;
 
+use BackedEnum;
 use Brick\JsonMapper\JsonMapperException;
 use Brick\JsonMapper\Reflection\Type\ArrayType;
 use Brick\JsonMapper\Reflection\Type\ClassType;
+use Brick\JsonMapper\Reflection\Type\EnumType;
 use Brick\JsonMapper\Reflection\Type\SimpleType;
 use Brick\JsonMapper\Reflection\Type\UnionType;
 use Brick\Reflection\ImportResolver;
+use IntBackedEnum;
 use LogicException;
+use ReflectionClass;
+use ReflectionEnum;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
 use ReflectionUnionType;
 use stdClass;
+use StringBackedEnum;
+use UnitEnum;
 
 final class Reflector
 {
@@ -200,7 +207,7 @@ final class Reflector
     /**
      * @throws JsonMapperException
      */
-    private function convertDocCommentType(string|array $type, ReflectionParameter $reflectionParameter): SimpleType|ClassType|ArrayType
+    private function convertDocCommentType(string|array $type, ReflectionParameter $reflectionParameter): SimpleType|ClassType|EnumType|ArrayType
     {
         if (is_string($type)) {
             return $this->convertNamedType($type, false, $reflectionParameter);
@@ -229,7 +236,7 @@ final class Reflector
         if ($type instanceof ReflectionUnionType) {
             return $this->createUnionType(
                 array_map(
-                    function (ReflectionNamedType|ReflectionIntersectionType $type) use ($reflectionParameter): SimpleType|ClassType|ArrayType {
+                    function (ReflectionNamedType|ReflectionIntersectionType $type) use ($reflectionParameter): SimpleType|ClassType|EnumType|ArrayType {
                         /** @psalm-suppress DocblockTypeContradiction https://github.com/vimeo/psalm/issues/9079 */
                         if ($type instanceof ReflectionIntersectionType) {
                             $this->throwOnIntersectionType($reflectionParameter);
@@ -266,7 +273,7 @@ final class Reflector
     /**
      * @throws JsonMapperException
      */
-    private function convertNamedType(string $namedType, bool $isReflection, ReflectionParameter $reflectionParameter): SimpleType|ClassType
+    private function convertNamedType(string $namedType, bool $isReflection, ReflectionParameter $reflectionParameter): SimpleType|ClassType|EnumType
     {
         $namedTypeLower = strtolower($namedType);
 
@@ -326,6 +333,27 @@ final class Reflector
             return new SimpleType($namedTypeLower);
         }
 
+        if (is_a($namedType, UnitEnum::class, true)) {
+            $reflectionEnum = new ReflectionEnum($namedType);
+
+            /** @var ReflectionNamedType|null $backingType */
+            $backingType = $reflectionEnum->getBackingType();
+
+            if ($backingType === null) {
+                throw new JsonMapperException('Non-backed enums are not supported.');
+            }
+
+            $backingType = $backingType->getName();
+
+            /** @var class-string<BackedEnum> $namedType */
+
+            return new EnumType(
+                $namedType,
+                isIntBacked: $backingType === 'int',
+                isStringBacked: $backingType === 'string',
+            );
+        }
+
         /** @psalm-var class-string $namedType */
         return new Type\ClassType($namedType);
     }
@@ -342,7 +370,7 @@ final class Reflector
     }
 
     /**
-     * @param (SimpleType|ClassType|ArrayType)[] $types
+     * @param (SimpleType|ClassType|EnumType|ArrayType)[] $types
      *
      * @throws JsonMapperException
      */

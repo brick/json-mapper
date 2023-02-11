@@ -12,6 +12,7 @@ use Brick\JsonMapper\Tests\Classes\NoConstructor;
 use Brick\JsonMapper\Tests\Classes\Shop\Company;
 use Brick\JsonMapper\Tests\Classes\Shop\Order;
 use Brick\JsonMapper\Tests\Classes\Shop\OrderReport;
+use Brick\JsonMapper\Tests\Classes\Shop\OrderStatus;
 use Brick\JsonMapper\Tests\Classes\Shop\Person;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -206,7 +207,8 @@ final class JsonMapperTest extends TestCase
                     "lastname": "Doe"
                 },
                 "date": "2022-01-01",
-                "amount": 12
+                "amount": 12,
+                "status": "pending"
             }
             JSON;
 
@@ -219,6 +221,7 @@ final class JsonMapperTest extends TestCase
         self::assertSame(1, $order->id);
         self::assertSame('2022-01-01', $order->date);
         self::assertSame(12.0, $order->amount);
+        self::assertSame(OrderStatus::PENDING, $order->status);
 
         self::assertInstanceOf(Person::class, $order->customer);
 
@@ -238,7 +241,8 @@ final class JsonMapperTest extends TestCase
                     "companyNumber": "1234-5678"
                 },
                 "date": "2022-02-03",
-                "amount": 15
+                "amount": 15,
+                "status": "shipped"
             }
             JSON;
 
@@ -251,6 +255,7 @@ final class JsonMapperTest extends TestCase
         self::assertSame(2, $order->id);
         self::assertSame('2022-02-03', $order->date);
         self::assertSame(15.0, $order->amount);
+        self::assertSame(OrderStatus::SHIPPED, $order->status);
 
         self::assertInstanceOf(Company::class, $order->customer);
 
@@ -270,7 +275,8 @@ final class JsonMapperTest extends TestCase
                     "unknownProperty": "XXX"
                 },
                 "date": "2022-02-03",
-                "amount": 15
+                "amount": 15,
+                "status": "delivered"
             }
             JSON;
 

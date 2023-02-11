@@ -11,6 +11,7 @@ final class Order
         public readonly Person|Company $customer,
         public readonly string $date,
         public readonly float $amount,
+        public readonly OrderStatus $status,
     ) {
     }
 }
