@@ -44,16 +44,18 @@ final class JsonMapper
         bool $allowMixed = false,
 
         /**
-         * Allows extra properties in the JSON object, that do not have a corresponding property in the PHP class.
-         * These properties will be ignored.
+         * Controls how extra properties in the JSON object are handled.
+         * Extra properties are properties of the JSON object that do not have a corresponding constructor parameter in
+         * the PHP class.
          */
-        private readonly bool $allowExtraProperties = false,
+        private readonly OnExtraProperties $onExtraProperties = OnExtraProperties::THROW_EXCEPTION,
 
         /**
-         * Allows missing properties in the JSON object, when the corresponding PHP class property is nullable.
-         * These properties will be set to null.
+         * Controls how missing properties in the JSON object are handled.
+         * Missing properties are constructor parameters in the PHP class that do not have a corresponding property in
+         * the JSON object.
          */
-        private readonly bool $allowMissingPropertiesSetNull = false,
+        private readonly OnMissingProperties $onMissingProperties = OnMissingProperties::THROW_EXCEPTION,
 
         /**
          * Mapper to convert JSON property names to PHP property names.
@@ -136,7 +138,7 @@ final class JsonMapper
             );
         }
 
-        if (! $this->allowExtraProperties) {
+        if ($this->onExtraProperties === OnExtraProperties::THROW_EXCEPTION) {
             /** @psalm-suppress MixedAssignment, RawObjectIteration */
             foreach ($jsonData as $jsonPropertyName => $_) {
                 /** @var string $jsonPropertyName https://github.com/vimeo/psalm/issues/9108 */
@@ -144,7 +146,7 @@ final class JsonMapper
                     throw new JsonMapperException(sprintf(
                         'Unexpected property "%s" in JSON data: ' .
                         '%s::__construct() does not have a corresponding $%s parameter. ' .
-                        'If you want to allow extra properties, set $allowExtraProperties to true.',
+                        'If you want to allow extra properties, change the $onExtraProperties option.',
                         $jsonPropertyName,
                         $className,
                         $this->jsonToPhpNameMapper->mapPropertyName($jsonPropertyName),
@@ -168,15 +170,16 @@ final class JsonMapper
         $parameterType = $this->reflector->getParameterType($reflectionParameter);
 
         if (!property_exists($jsonData, $jsonPropertyName)) {
-            if ($this->allowMissingPropertiesSetNull && $parameterType->allowsNull) {
-                return null;
+            if ($this->onMissingProperties === OnMissingProperties::SET_NULL) {
+                if ($parameterType->allowsNull) {
+                    return null;
+                }
             }
 
             $exceptionMessage = sprintf('Missing property "%s" in JSON data.', $jsonPropertyName);
 
             if ($parameterType->allowsNull) {
-                $exceptionMessage .= ' If you want to allow missing JSON properties for nullable PHP properties,';
-                $exceptionMessage .= ' set $allowMissingPropertiesSetNull to true.';
+                $exceptionMessage .= ' If you want to allow missing properties, change the $onMissingProperties option.';
             }
 
             throw new JsonMapperException($exceptionMessage);

@@ -291,157 +291,160 @@ The types of the parameters must match exactly, with the same semantics as PHP's
 
 The `JsonMapper` constructor accepts the following options:
 
----
+- **`$allowUntypedArrays`**
 
-#### `$allowUntypedArrays`
+  By default, `JsonMapper` will throw an exception if the parameter is declared as `array` without a corresponding `@param` annotation, or is just documented as `@param array`.
+  
+  By setting this option to `true`, `JsonMapper` will allow such parameters, and accept to pass a JSON array as is, without checking or mapping its contents:
+  
+  ```php
+  $mapper = new JsonMapper(
+      allowUntypedArrays: true,
+  );
+  ```
 
-By default, `JsonMapper` will throw an exception if the parameter is declared as `array` without a corresponding `@param` annotation, or is just documented as `@param array`.
+- **`$allowUntypedObjects`**
 
-By setting this option to `true`, `JsonMapper` will allow such parameters, and accept to pass a JSON array as is, without checking or mapping its contents:
+  By default, `JsonMapper` will throw an exception if a parameter is declared as `object` or `stdClass`.
+  
+  By setting this option to `true`, `JsonMapper` will allow such parameters, and accept to pass a JSON object as an `stdClass` instance, without checking or mapping its contents:
+  
+  ```php
+  $mapper = new JsonMapper(
+      allowUntypedObjects: true,
+  );
+  ```
 
-```php
-$mapper = new JsonMapper(
-    allowUntypedArrays: true,
-);
-```
+- **`$allowMixed`**
 
----
+  By default, `JsonMapper` will throw an exception if a parameter is declared as `mixed`.
+  
+  By setting this option to `true`, `JsonMapper` will allow such parameters, and accept to pass a JSON value as is, without checking or mapping its contents:
+  
+  ```php
+  $mapper = new JsonMapper(
+      allowMixed: true,
+  );
+  ```
 
-#### `$allowUntypedObjects`
+- **`$onExtraProperties`**
 
-By default, `JsonMapper` will throw an exception if a parameter is declared as `object` or `stdClass`.
+  This option accepts an `OnExtraProperties` enum value, and controls how `JsonMapper` reacts if a JSON object contains a property that does not have a matching parameter in the corresponding DTO's constructor signature:
 
-By setting this option to `true`, `JsonMapper` will allow such parameters, and accept to pass a JSON object as an `stdClass` instance, without checking or mapping its contents:
+  - **`OnExtraProperties::THROW_EXCEPTION`**
 
-```php
-$mapper = new JsonMapper(
-    allowUntypedObjects: true,
-);
-```
+    `JsonMapper` will throw a `JsonMapperException`. This is the default value.
 
----
+  - **`OnExtraProperties::IGNORE`**
 
-#### `$allowMixed`
+    `JsonMapper` will ignore any extra properties:
 
-By default, `JsonMapper` will throw an exception if a parameter is declared as `mixed`.
-
-By setting this option to `true`, `JsonMapper` will allow such parameters, and accept to pass a JSON value as is, without checking or mapping its contents:
-
-```php
-$mapper = new JsonMapper(
-    allowMixed: true,
-);
-```
-
----
-
-#### `$allowExtraProperties`
-
-By default, `JsonMapper` will throw an exception if a JSON object contains a property that does not have a matching parameter in the corresponding DTO's constructor signature.
-
-By setting this option to `true`, `JsonMapper` will ignore these extra properties:
-
-```php
-class Order
-{
-    public function __construct(
-        public readonly int $id,
-        public readonly string $amount,
-    ) {
+    ```php
+    class Order
+    {
+        public function __construct(
+            public readonly int $id,
+            public readonly string $amount,
+        ) {
+        }
     }
-}
+    
+    $json = '{
+      "id": 1,
+      "amount": "100.00",
+      "extraProperty": "foo",
+      "otherExtraProperty": "bar"
+    }';
+    
+    $mapper = new JsonMapper(
+        onExtraProperties: OnExtraProperties::IGNORE,
+    );
+    
+    // extra properties "extraProperty" and "otherExtraProperty" are ignored,
+    // and do not throw an exception anymore.
+    $order = $mapper->map($json, Order::class);
+    ```
 
-$json = '{
-  "id": 1,
-  "amount": "100.00",
-  "extraProperty": "foo",
-  "otherExtraProperty": "bar"
-}';
+- **`$onMissingProperties`**
 
-$mapper = new JsonMapper(
-    allowExtraProperties: true,
-);
+  This option accepts an `OnMissingProperties` enum value, and controls how `JsonMapper` reacts if a JSON object is missing a property that is declared in the corresponding DTO's constructor signature:
 
-// extra properties "extraProperty" and "otherExtraProperty" are ignored,
-// and do not throw an exception anymore.
-$order = $mapper->map($json, Order::class);
-```
+  - **`OnMissingProperties::THROW_EXCEPTION`**
 
----
+    `JsonMapper` will throw a `JsonMapperException`. This is the default value.
 
-#### `$allowMissingPropertiesSetNull`
+  - **`OnMissingProperties::SET_NULL`**
+  
+    `JsonMapper` will set the parameter to `null` if the JSON property is missing and the parameter is nullable:
 
-By default, `JsonMapper` will throw an exception if a JSON object does not contain a property that is declared in the corresponding DTO's constructor signature.
-
-By setting this option to `true`, `JsonMapper` will set the parameter to `null` if the parameter is nullable:
-
-```php
-class Order
-{
-    public function __construct(
-        public readonly int $id,
-        public readonly string $amount,
-        public readonly ?string $customerName,
-    ) {
+    ```php
+    use Brick\JsonMapper\JsonMapper;
+    use Brick\JsonMapper\OnMissingProperties;
+    
+    class Order
+    {
+        public function __construct(
+            public readonly int $id,
+            public readonly ?string $customerName,
+        ) {
+        }
     }
-}
+    
+    $json = '{
+      "id": 1
+    }';
+    
+    $mapper = new JsonMapper(
+        onMissingProperties: OnMissingProperties::SET_NULL,
+    );
+    
+    $order = $mapper->map($json, Order::class);
+    var_export($order->customerName); // NULL
+    ```
 
-$json = '{
-  "id": 1,
-  "amount": "100.00"
-}';
+    If the property is missing and the parameter is not nullable, an exception will be thrown regardless of this option.
 
-$mapper = new JsonMapper(
-    allowMissingPropertiesSetNull: true,
-);
+- **`$jsonToPhpNameMapper` & `$phpToJsonNameMapper`**
 
-$order = $mapper->map($json, Order::class);
-var_export($order->customerName); // NULL
-```
+  By default, `JsonMapper` assumes that the JSON property names are the same as the PHP parameter names.
+  
+  By providing implementations of the `NameMapper` interface, you can customize the mapping between the two.
+  
+  The library comes with two implementations for a common use case:
+  
+  - `SnakeCaseToCamelCaseMapper` will convert `snake_case` `camelCase`
+  - `CamelCaseToSnakeCaseMapper` will convert `camelCase` to `snake_case`
+  
+  Example:
+  
+  ```php
+  use Brick\JsonMapper\JsonMapper;
+  use Brick\JsonMapper\NameMapper\CamelCaseToSnakeCaseMapper;
+  use Brick\JsonMapper\NameMapper\SnakeCaseToCamelCaseMapper;
+  
+  class Order
+  {
+      public function __construct(
+          public readonly int $id,
+          public readonly int $amountInCents,
+          public readonly string $customerName,
+      ) {
+      }
+  }
+  
+  $json = '{
+    "id": 1,
+    "amount_in_cents": 2499,
+    "customer_name": "John Doe"
+  }';
+  
+  $mapper = new JsonMapper(
+      jsonToPhpNameMapper: new SnakeCaseToCamelCaseMapper(),
+      phpToJsonNameMapper: new CamelCaseToSnakeCaseMapper(),
+  );
+  
+  $order = $mapper->map($json, Order::class);
 
-If the property is missing and the parameter is not nullable, an exception will be thrown regardless of this option.
-
----
-
-#### `$jsonToPhpNameMapper` & `$phpToJsonNameMapper`
-
-By default, `JsonMapper` assumes that the JSON property names are the same as the PHP parameter names.
-
-By providing implementations of the `NameMapper` interface, you can customize the mapping between the two.
-
-The library comes with two implementations for a common use case:
-
-- `SnakeCaseToCamelCaseMapper` will convert `snake_case` `camelCase`
-- `CamelCaseToSnakeCaseMapper` will convert `camelCase` to `snake_case`
-
-Example:
-
-```php
-use Brick\JsonMapper\JsonMapper;
-use Brick\JsonMapper\NameMapper\CamelCaseToSnakeCaseMapper;
-use Brick\JsonMapper\NameMapper\SnakeCaseToCamelCaseMapper;
-
-class Order
-{
-    public function __construct(
-        public readonly int $id,
-        public readonly int $amountInCents,
-        public readonly string $customerName,
-    ) {
-    }
-}
-
-$json = '{
-  "id": 1,
-  "amount_in_cents": 2499,
-  "customer_name": "John Doe"
-}';
-
-$mapper = new JsonMapper(
-    jsonToPhpNameMapper: new SnakeCaseToCamelCaseMapper(),
-    phpToJsonNameMapper: new CamelCaseToSnakeCaseMapper(),
-);
-
-$order = $mapper->map($json, Order::class);
-echo $order->amountInCents; // 2499
-```
+  echo $order->amountInCents; // 2499
+  echo $order->customerName; // 'John Doe'
+  ```

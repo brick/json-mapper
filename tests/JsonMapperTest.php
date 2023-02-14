@@ -6,6 +6,8 @@ namespace Brick\JsonMapper\Tests\Reflection;
 
 use Brick\JsonMapper\JsonMapper;
 use Brick\JsonMapper\JsonMapperException;
+use Brick\JsonMapper\OnExtraProperties;
+use Brick\JsonMapper\OnMissingProperties;
 use Brick\JsonMapper\Tests\Classes\Music\Album;
 use Brick\JsonMapper\Tests\Classes\Music\Artist;
 use Brick\JsonMapper\Tests\Classes\NoConstructor;
@@ -112,7 +114,7 @@ final class JsonMapperTest extends TestCase
         self::assertSame('https://example.com/the-dark-side-of-the-moon.jpg', $album->picture);
     }
 
-    public function testMapWithExtraProperties(): void
+    public function testMapWithOnExtraPropertiesThrowException(): void
     {
         $json = <<<'JSON'
             {
@@ -129,13 +131,13 @@ final class JsonMapperTest extends TestCase
         $this->expectExceptionMessage(
             'Unexpected property "extraProperty" in JSON data: ' .
             'Brick\JsonMapper\Tests\Classes\Music\Artist::__construct() does not have a corresponding ' .
-            '$extraProperty parameter. If you want to allow extra properties, set $allowExtraProperties to true.',
+            '$extraProperty parameter. If you want to allow extra properties, change the $onExtraProperties option.',
         );
 
         $jsonMapper->map($json, Artist::class);
     }
 
-    public function testMapWithExtraPropertiesAllowed(): void
+    public function testMapWithOnExtraPropertiesIgnore(): void
     {
         $json = <<<'JSON'
             {
@@ -146,7 +148,7 @@ final class JsonMapperTest extends TestCase
             }
             JSON;
 
-        $jsonMapper = new JsonMapper(allowExtraProperties: true);
+        $jsonMapper = new JsonMapper(onExtraProperties: OnExtraProperties::IGNORE);
         $artist = $jsonMapper->map($json, Artist::class);
 
         self::assertInstanceOf(Artist::class, $artist);
@@ -156,7 +158,7 @@ final class JsonMapperTest extends TestCase
         self::assertSame('https://example.com/pink-floyd.jpg', $artist->picture);
     }
 
-    public function testMapWithMissingProperties(): void
+    public function testMapWithOnMissingPropertiesThrowException(): void
     {
         $json = <<<'JSON'
             {
@@ -170,14 +172,13 @@ final class JsonMapperTest extends TestCase
         $this->expectException(JsonMapperException::class);
         $this->expectExceptionMessage(
             'Missing property "picture" in JSON data. ' .
-            'If you want to allow missing JSON properties for nullable PHP properties, ' .
-            'set $allowMissingPropertiesSetNull to true.',
+            'If you want to allow missing properties, change the $onMissingProperties option.',
         );
 
         $jsonMapper->map($json, Artist::class);
     }
 
-    public function testMapWithMissingPropertiesAllowed(): void
+    public function testMapWithOnMissingPropertiesSetNull(): void
     {
         $json = <<<'JSON'
             {
@@ -186,7 +187,7 @@ final class JsonMapperTest extends TestCase
             }
             JSON;
 
-        $jsonMapper = new JsonMapper(allowMissingPropertiesSetNull: true);
+        $jsonMapper = new JsonMapper(onMissingProperties: OnMissingProperties::SET_NULL);
         $artist = $jsonMapper->map($json, Artist::class);
 
         self::assertInstanceOf(Artist::class, $artist);
