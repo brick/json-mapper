@@ -197,6 +197,25 @@ final class JsonMapperTest extends TestCase
         self::assertNull($artist->picture);
     }
 
+    public function testMapWithOnMissingPropertiesSetDefault(): void
+    {
+        $json = <<<'JSON'
+            {
+                "id": 2,
+                "name": "Pink Floyd"
+            }
+            JSON;
+
+        $jsonMapper = new JsonMapper(onMissingProperties: OnMissingProperties::SET_DEFAULT);
+        $artist = $jsonMapper->map($json, Artist::class);
+
+        self::assertInstanceOf(Artist::class, $artist);
+
+        self::assertSame(2, $artist->id);
+        self::assertSame('Pink Floyd', $artist->name);
+        self::assertSame('default-picture', $artist->picture);
+    }
+
     public function testMapOrderWithPersonCustomer(): void
     {
         $json = <<<'JSON'
@@ -286,8 +305,8 @@ final class JsonMapperTest extends TestCase
         $this->expectException(JsonMapperException::class);
         $this->expectExceptionMessage(
             "JSON object does not match any of the allowed PHP classes:\n" .
-            " - Brick\JsonMapper\Tests\Classes\Shop\Person: Missing property \"firstname\" in JSON data.\n" .
-            " - Brick\JsonMapper\Tests\Classes\Shop\Company: Missing property \"companyNumber\" in JSON data.",
+            " - Brick\JsonMapper\Tests\Classes\Shop\Person: Missing property \"firstname\" in JSON data. If you want to allow missing properties, change the \$onMissingProperties option.\n" .
+            " - Brick\JsonMapper\Tests\Classes\Shop\Company: Missing property \"companyNumber\" in JSON data. If you want to allow missing properties, change the \$onMissingProperties option.",
         );
 
         $jsonMapper->map($json, Order::class);

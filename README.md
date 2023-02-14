@@ -404,6 +404,37 @@ The `JsonMapper` constructor accepts the following options:
 
     If the property is missing and the parameter is not nullable, an exception will be thrown regardless of this option.
 
+  - **`OnMissingProperties::SET_DEFAULT`**
+
+    `JsonMapper` will set the parameter to its default value if the JSON property is missing and the parameter has a default value:
+    
+    ```php
+    use Brick\JsonMapper\JsonMapper;
+    use Brick\JsonMapper\OnMissingProperties;
+    
+    class Order
+    {
+        public function __construct(
+            public readonly int $id,
+            public readonly string $customerName = 'no name',
+        ) {
+        }
+    }
+    
+    $json = '{
+      "id": 1
+    }';
+    
+    $mapper = new JsonMapper(
+        onMissingProperties: OnMissingProperties::SET_DEFAULT,
+    );
+    
+    $order = $mapper->map($json, Order::class);
+    var_export($order->customerName); // 'no name'
+    ```
+
+    If the property is missing and the parameter does not have a default value, an exception will be thrown regardless of this option.
+
 - **`$jsonToPhpNameMapper` & `$phpToJsonNameMapper`**
 
   By default, `JsonMapper` assumes that the JSON property names are the same as the PHP parameter names.

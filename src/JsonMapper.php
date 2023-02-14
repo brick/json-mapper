@@ -176,11 +176,21 @@ final class JsonMapper
                 }
             }
 
-            $exceptionMessage = sprintf('Missing property "%s" in JSON data.', $jsonPropertyName);
-
-            if ($parameterType->allowsNull) {
-                $exceptionMessage .= ' If you want to allow missing properties, change the $onMissingProperties option.';
+            if ($this->onMissingProperties === OnMissingProperties::SET_DEFAULT) {
+                if ($reflectionParameter->isDefaultValueAvailable()) {
+                    // TODO we should technically check if the default value is compatible with the parameter type,
+                    //      as the type declared as @param may be more specific than the PHP type.
+                    return $reflectionParameter->getDefaultValue();
+                }
             }
+
+            $exceptionMessage = sprintf('Missing property "%s" in JSON data', $jsonPropertyName);
+
+            $exceptionMessage .= match ($this->onMissingProperties) {
+                OnMissingProperties::SET_NULL => ', and the parameter does not allow null.',
+                OnMissingProperties::SET_DEFAULT => ', and the parameter does not have a default value.',
+                OnMissingProperties::THROW_EXCEPTION => '. If you want to allow missing properties, change the $onMissingProperties option.',
+            };
 
             throw new JsonMapperException($exceptionMessage);
         }
