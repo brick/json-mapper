@@ -8,8 +8,8 @@ use Brick\JsonMapper\NameMapper;
 
 final class NullMapper implements NameMapper
 {
-    public function mapPropertyName(string $propertyName): string
+    public function mapName(string $name): string
     {
-        return $propertyName;
+        return $name;
     }
 }

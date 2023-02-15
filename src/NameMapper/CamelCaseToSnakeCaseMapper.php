@@ -8,12 +8,12 @@ use Brick\JsonMapper\NameMapper;
 
 final class CamelCaseToSnakeCaseMapper implements NameMapper
 {
-    public function mapPropertyName(string $propertyName): string
+    public function mapName(string $name): string
     {
         return preg_replace_callback(
             '/[A-Z]/',
             fn (array $matches) => '_' . strtolower($matches[0]),
-            $propertyName,
+            $name,
         );
     }
 }

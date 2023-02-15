@@ -125,7 +125,7 @@ final class JsonMapper
         $consumedJsonPropertyNames = [];
 
         foreach ($reflectionConstructor->getParameters() as $reflectionParameter) {
-            $jsonPropertyName = $this->phpToJsonNameMapper->mapPropertyName($reflectionParameter->getName());
+            $jsonPropertyName = $this->phpToJsonNameMapper->mapName($reflectionParameter->getName());
             $consumedJsonPropertyNames[] = $jsonPropertyName;
 
             $parameters[$reflectionParameter->getName()] = $this->getParameterValue(
@@ -146,7 +146,7 @@ final class JsonMapper
                             '%s::__construct() does not have a corresponding $%s parameter.',
                             $jsonPropertyName,
                             $className,
-                            $this->jsonToPhpNameMapper->mapPropertyName($jsonPropertyName),
+                            $this->jsonToPhpNameMapper->mapName($jsonPropertyName),
                         ),
                         'If you want to allow extra properties, change the $onExtraProperties option.',
                     ]);

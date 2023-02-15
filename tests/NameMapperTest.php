@@ -15,7 +15,7 @@ final class NameMapperTest extends TestCase
      */
     public function testNameMapper(NameMapper $nameMapper, string $propertyName, string $expected): void
     {
-        self::assertSame($expected, $nameMapper->mapPropertyName($propertyName));
+        self::assertSame($expected, $nameMapper->mapName($propertyName));
     }
 
     /**

@@ -6,5 +6,5 @@ namespace Brick\JsonMapper;
 
 interface NameMapper
 {
-    public function mapPropertyName(string $propertyName): string;
+    public function mapName(string $name): string;
 }
