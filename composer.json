@@ -14,8 +14,8 @@
     "brick/reflection": "~0.5.0"
   },
   "require-dev": {
-    "php-coveralls/php-coveralls": "^2.2",
-    "phpunit/phpunit": "^9.5.0",
+    "php-coveralls/php-coveralls": "^2.5",
+    "phpunit/phpunit": "^10.0.7",
     "vimeo/psalm": "5.6.0"
   },
   "autoload": {

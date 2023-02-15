@@ -43,10 +43,10 @@ final class ReflectorTest extends TestCase
     /**
      * @return Generator<string, array{ReflectionParameter, string, Config}>
      */
-    public function providerGetParameterType(): Generator
+    public static function providerGetParameterType(): Generator
     {
-        foreach ($this->getKitchenSinkMethodParameters() as $parameterIdentifier => $parameter) {
-            $attributes = $this->getAttributes($parameter, ExpectParameterType::class);
+        foreach (self::getKitchenSinkMethodParameters() as $parameterIdentifier => $parameter) {
+            $attributes = self::getAttributes($parameter, ExpectParameterType::class);
 
             foreach ($attributes as $attribute) {
                 yield $parameterIdentifier => [$parameter, $attribute->type, $attribute->config];
@@ -72,10 +72,10 @@ final class ReflectorTest extends TestCase
     /**
      * @return Generator<string, array{ReflectionParameter, string, Config}>
      */
-    public function providerGetParameterTypeThrowsException(): Generator
+    public static function providerGetParameterTypeThrowsException(): Generator
     {
-        foreach ($this->getKitchenSinkMethodParameters() as $parameterIdentifier => $parameter) {
-            $attributes = $this->getAttributes($parameter, ExpectException::class);
+        foreach (self::getKitchenSinkMethodParameters() as $parameterIdentifier => $parameter) {
+            $attributes = self::getAttributes($parameter, ExpectException::class);
 
             foreach ($attributes as $attribute) {
                 yield $parameterIdentifier => [$parameter, $attribute->message, $attribute->config];
@@ -89,16 +89,16 @@ final class ReflectorTest extends TestCase
     public function testKitchenSinkMethodsHaveExpectations(ReflectionParameter $parameter): void
     {
         $attributes = array_merge(
-            $this->getAttributes($parameter, ExpectException::class),
-            $this->getAttributes($parameter, ExpectParameterType::class),
+            self::getAttributes($parameter, ExpectException::class),
+            self::getAttributes($parameter, ExpectParameterType::class),
         );
 
         self::assertNotEmpty($attributes, 'Parameter has no expectations.');
     }
 
-    public function providerKitchenSinkMethodsHaveExpectations(): Generator
+    public static function providerKitchenSinkMethodsHaveExpectations(): Generator
     {
-        foreach ($this->getKitchenSinkMethodParameters() as $parameterIdentifier => $parameter) {
+        foreach (self::getKitchenSinkMethodParameters() as $parameterIdentifier => $parameter) {
             yield $parameterIdentifier => [$parameter];
         }
     }
@@ -106,7 +106,7 @@ final class ReflectorTest extends TestCase
     /**
      * @return Generator<string, ReflectionParameter>
      */
-    private function getKitchenSinkMethodParameters(): Generator
+    private static function getKitchenSinkMethodParameters(): Generator
     {
         $class = new ReflectionClass(KitchenSink::class);
 
@@ -130,7 +130,7 @@ final class ReflectorTest extends TestCase
      *
      * @return T[]
      */
-    private function getAttributes(ReflectionParameter $parameter, string $className): array
+    private static function getAttributes(ReflectionParameter $parameter, string $className): array
     {
         return array_map(
             fn (ReflectionAttribute $attribute) => $attribute->newInstance(),

@@ -21,17 +21,17 @@ final class NameMapperTest extends TestCase
     /**
      * @return Generator<array{NameMapper, string, string}>
      */
-    public function providerNameMapper(): Generator
+    public static function providerNameMapper(): Generator
     {
-        foreach ($this->providerNullMapper() as $index => $test) {
+        foreach (self::providerNullMapper() as $index => $test) {
             yield 'NullMapper#' . $index => [new NameMapper\NullMapper(), ...$test];
         }
 
-        foreach ($this->providerCamelCaseToSnakeCaseMapper() as $index => $test) {
+        foreach (self::providerCamelCaseToSnakeCaseMapper() as $index => $test) {
             yield 'CamelCaseToSnakeCaseMapper#' . $index => [new NameMapper\CamelCaseToSnakeCaseMapper(), ...$test];
         }
 
-        foreach ($this->providerSnakeCaseToCamelCaseMapper() as $index => $test) {
+        foreach (self::providerSnakeCaseToCamelCaseMapper() as $index => $test) {
             yield 'SnakeCaseToCamelCaseMapper#' . $index => [new NameMapper\SnakeCaseToCamelCaseMapper(), ...$test];
         }
     }
@@ -39,7 +39,7 @@ final class NameMapperTest extends TestCase
     /**
      * @return array<array{string, string}>
      */
-    private function providerNullMapper(): array
+    private static function providerNullMapper(): array
     {
         return [
             ['foo', 'foo'],
@@ -52,7 +52,7 @@ final class NameMapperTest extends TestCase
     /**
      * @return array<array{string, string}>
      */
-    private function providerCamelCaseToSnakeCaseMapper(): array
+    private static function providerCamelCaseToSnakeCaseMapper(): array
     {
         return [
             ['fooBar', 'foo_bar'],
@@ -63,7 +63,7 @@ final class NameMapperTest extends TestCase
     /**
      * @return array<array{string, string}>
      */
-    private function providerSnakeCaseToCamelCaseMapper(): array
+    private static function providerSnakeCaseToCamelCaseMapper(): array
     {
         return [
             ['foo_bar', 'fooBar'],

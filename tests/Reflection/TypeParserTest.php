@@ -19,7 +19,7 @@ final class TypeParserTest extends TestCase
         self::assertSame($expected, $typeParser->parse());
     }
 
-    public function providerParse(): array
+    public static function providerParse(): array
     {
         return [
             ['string', ['string']],
@@ -63,7 +63,7 @@ final class TypeParserTest extends TestCase
         $typeParser->parse();
     }
 
-    public function providerParseInvalidType(): array
+    public static function providerParseInvalidType(): array
     {
         return [
             ['', 'Expected named type or "(", found end of string.'],

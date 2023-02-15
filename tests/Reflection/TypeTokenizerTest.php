@@ -28,7 +28,7 @@ final class TypeTokenizerTest extends TestCase
         self::assertSame($expected, $tokens);
     }
 
-    public function providerTokenize(): array
+    public static function providerTokenize(): array
     {
         return [
             ['', []],
@@ -87,7 +87,7 @@ final class TypeTokenizerTest extends TestCase
         TypeTokenizer::tokenize($type);
     }
 
-    public function providerTokenizeInvalidType(): array
+    public static function providerTokenizeInvalidType(): array
     {
         return [
             ['=', 'Unexpected "=" at offset 0.'],
