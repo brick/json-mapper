@@ -12,9 +12,7 @@ use Brick\JsonMapper\Reflection\Type\EnumType;
 use Brick\JsonMapper\Reflection\Type\SimpleType;
 use Brick\JsonMapper\Reflection\Type\UnionType;
 use Brick\Reflection\ImportResolver;
-use IntBackedEnum;
 use LogicException;
-use ReflectionClass;
 use ReflectionEnum;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
@@ -22,7 +20,6 @@ use ReflectionParameter;
 use ReflectionType;
 use ReflectionUnionType;
 use stdClass;
-use StringBackedEnum;
 use UnitEnum;
 
 final class Reflector

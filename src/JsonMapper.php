@@ -6,14 +6,11 @@ namespace Brick\JsonMapper;
 
 use Brick\JsonMapper\NameMapper\NullMapper;
 use Brick\JsonMapper\Reflection\Reflector;
-use Brick\JsonMapper\Reflection\Type\ClassType;
 use Brick\JsonMapper\Reflection\Type\UnionType;
-use Closure;
 use JsonException;
 use LogicException;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionNamedType;
 use ReflectionParameter;
 use stdClass;
 

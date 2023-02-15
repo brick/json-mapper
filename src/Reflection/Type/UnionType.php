@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Brick\JsonMapper\Reflection\Type;
 
 use Brick\JsonMapper\JsonMapperException;
-use ReflectionClass;
 use Stringable;
 
 /**
