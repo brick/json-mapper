@@ -1,8 +1,6 @@
 name: CI
 
-on:
-  push
-  pull_request
+on: [push, pull_request]
 
 env:
   PSALM_PHP_VERSION: "8.2"
