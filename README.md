@@ -340,6 +340,9 @@ The `JsonMapper` constructor accepts the following options:
     `JsonMapper` will ignore any extra properties:
 
     ```php
+    use Brick\JsonMapper\JsonMapper;
+    use Brick\JsonMapper\OnExtraProperties;
+    
     class Order
     {
         public function __construct(
