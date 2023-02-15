@@ -22,6 +22,8 @@ use Brick\JsonMapper\JsonMapperException;
  * - nullable types: '?string'
  * - generics style: 'array<string>'
  * - intersection types: 'A&B'
+ *
+ * @internal This class is not part of the public API, and may change without notice.
  */
 final class TypeParser
 {

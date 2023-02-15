@@ -22,6 +22,9 @@ use ReflectionUnionType;
 use stdClass;
 use UnitEnum;
 
+/**
+ * @internal This class is not part of the public API, and may change without notice.
+ */
 final class Reflector
 {
     private const ALLOWED_BUILTIN_TYPES = [

@@ -10,6 +10,8 @@ use Stringable;
 /**
  * Represents a combination of supported types.
  * For simplicity, even a single type is represented as a union type with a single element.
+ *
+ * @internal This class is not part of the public API, and may change without notice.
  */
 final class UnionType implements Stringable
 {

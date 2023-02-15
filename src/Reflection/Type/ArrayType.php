@@ -6,6 +6,9 @@ namespace Brick\JsonMapper\Reflection\Type;
 
 use Stringable;
 
+/**
+ * @internal This class is not part of the public API, and may change without notice.
+ */
 final class ArrayType implements Stringable
 {
     public function __construct(

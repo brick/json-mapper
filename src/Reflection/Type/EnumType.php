@@ -8,6 +8,9 @@ use BackedEnum;
 use InvalidArgumentException;
 use Stringable;
 
+/**
+ * @internal This class is not part of the public API, and may change without notice.
+ */
 final class EnumType implements Stringable
 {
     /**

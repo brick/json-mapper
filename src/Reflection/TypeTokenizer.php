@@ -17,6 +17,8 @@ use Brick\JsonMapper\JsonMapperException;
  *  - "[]"
  *
  * Whitespace around tokens is ignored.
+ *
+ * @internal This class is not part of the public API, and may change without notice.
  */
 final class TypeTokenizer
 {
