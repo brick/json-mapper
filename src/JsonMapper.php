@@ -90,7 +90,7 @@ final class JsonMapper
         try {
             $data = json_decode($json, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw new JsonMapperException('Invalid JSON data: ' . $e->getMessage(), 0, $e);
+            throw new JsonMapperException('Invalid JSON data: ' . $e->getMessage(), $e);
         }
 
         if (! $data instanceof stdClass) {
@@ -114,7 +114,7 @@ final class JsonMapper
         try {
             $reflectionClass = new ReflectionClass($className);
         } catch (ReflectionException $e) {
-            throw new JsonMapperException('Invalid class name: ' . $className, 0, $e);
+            throw new JsonMapperException('Invalid class name: ' . $className, $e);
         }
 
         $reflectionConstructor = $reflectionClass->getConstructor();
@@ -143,14 +143,16 @@ final class JsonMapper
             foreach ($jsonData as $jsonPropertyName => $_) {
                 /** @var string $jsonPropertyName https://github.com/vimeo/psalm/issues/9108 */
                 if (! in_array($jsonPropertyName, $consumedJsonPropertyNames, true)) {
-                    throw new JsonMapperException(sprintf(
-                        'Unexpected property "%s" in JSON data: ' .
-                        '%s::__construct() does not have a corresponding $%s parameter. ' .
+                    throw new JsonMapperException([
+                        sprintf(
+                            'Unexpected property "%s" in JSON data: ' .
+                            '%s::__construct() does not have a corresponding $%s parameter.',
+                            $jsonPropertyName,
+                            $className,
+                            $this->jsonToPhpNameMapper->mapPropertyName($jsonPropertyName),
+                        ),
                         'If you want to allow extra properties, change the $onExtraProperties option.',
-                        $jsonPropertyName,
-                        $className,
-                        $this->jsonToPhpNameMapper->mapPropertyName($jsonPropertyName),
-                    ));
+                    ]);
                 }
             }
         }
@@ -184,15 +186,14 @@ final class JsonMapper
                 }
             }
 
-            $exceptionMessage = sprintf('Missing property "%s" in JSON data', $jsonPropertyName);
-
-            $exceptionMessage .= match ($this->onMissingProperties) {
-                OnMissingProperties::SET_NULL => ', and the parameter does not allow null.',
-                OnMissingProperties::SET_DEFAULT => ', and the parameter does not have a default value.',
-                OnMissingProperties::THROW_EXCEPTION => '. If you want to allow missing properties, change the $onMissingProperties option.',
-            };
-
-            throw new JsonMapperException($exceptionMessage);
+            throw new JsonMapperException([
+                sprintf('Missing property "%s" in JSON data.', $jsonPropertyName),
+                match ($this->onMissingProperties) {
+                    OnMissingProperties::SET_NULL => 'The parameter does not allow null.',
+                    OnMissingProperties::SET_DEFAULT => 'The parameter does not have a default value.',
+                    OnMissingProperties::THROW_EXCEPTION => 'If you want to allow missing properties, change the $onMissingProperties option.',
+                }
+            ]);
         }
 
         $jsonValue = $jsonData->{$jsonPropertyName};
@@ -325,7 +326,7 @@ final class JsonMapper
             try {
                 $matches[] = $this->mapToObject($jsonValue, $classType->name);
             } catch (JsonMapperException $e) {
-                $errors[] = [$classType->name, $e->getMessage()];
+                $errors[] = [$classType->name, $e->getFirstMessage()];
             }
         }
 

@@ -305,8 +305,8 @@ final class JsonMapperTest extends TestCase
         $this->expectException(JsonMapperException::class);
         $this->expectExceptionMessage(
             "JSON object does not match any of the allowed PHP classes:\n" .
-            " - Brick\JsonMapper\Tests\Classes\Shop\Person: Missing property \"firstname\" in JSON data. If you want to allow missing properties, change the \$onMissingProperties option.\n" .
-            " - Brick\JsonMapper\Tests\Classes\Shop\Company: Missing property \"companyNumber\" in JSON data. If you want to allow missing properties, change the \$onMissingProperties option.",
+            " - Brick\JsonMapper\Tests\Classes\Shop\Person: Missing property \"firstname\" in JSON data.\n" .
+            " - Brick\JsonMapper\Tests\Classes\Shop\Company: Missing property \"companyNumber\" in JSON data.",
         );
 
         $jsonMapper->map($json, Order::class);

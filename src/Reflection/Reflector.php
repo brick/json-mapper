@@ -123,11 +123,13 @@ final class Reflector
         $parameterType = $parameter->getType();
 
         if ($parameterType === null) {
-            throw new JsonMapperException(sprintf(
-                'Parameter %s must have a type or be documented with @param. ' .
+            throw new JsonMapperException([
+                sprintf(
+                    'Parameter %s must have a type or be documented with @param.',
+                    $this->getParameterNameWithDeclaringFunctionName($parameter),
+                ),
                 'You can explicitly accept any type by typing the parameter as mixed.',
-                $this->getParameterNameWithDeclaringFunctionName($parameter),
-            ));
+            ]);
         }
 
         return $this->getParameterTypeFromReflection($parameterType, $parameter);
@@ -291,30 +293,36 @@ final class Reflector
         }
 
         if ($namedTypeLower === 'array' && ! $this->allowUntypedArrays) {
-            throw new JsonMapperException(sprintf(
-                'Parameter %s contains type "array" which is not allowed by default. ' .
-                'Please document the type of the array in @param, for example "string[]". ' .
+            throw new JsonMapperException([
+                sprintf(
+                    'Parameter %s contains type "array" which is not allowed by default.',
+                    $this->getParameterNameWithDeclaringFunctionName($reflectionParameter),
+                ),
+                'Please document the type of the array in @param, for example "string[]".',
                 'Alternatively, if you want to allow untyped arrays, and receive the raw JSON array, set $allowUntypedArrays to true.',
-                $this->getParameterNameWithDeclaringFunctionName($reflectionParameter),
-            ));
+            ]);
         }
 
         if (($namedTypeLower === 'stdclass' || $namedTypeLower === 'object') && ! $this->allowUntypedObjects) {
-            throw new JsonMapperException(sprintf(
-                'Parameter %s contains type "%s" which is not allowed by default. ' .
-                'It is advised to map a JSON object to a PHP class. ' .
+            throw new JsonMapperException([
+                sprintf(
+                    'Parameter %s contains type "%s" which is not allowed by default.',
+                    $this->getParameterNameWithDeclaringFunctionName($reflectionParameter),
+                    $namedTypeLower === 'stdclass' ? stdClass::class : 'object',
+                ),
+                'It is advised to map a JSON object to a PHP class.',
                 'If you want to allow this, and receive the raw stdClass object, set $allowUntypedObjects to true.',
-                $this->getParameterNameWithDeclaringFunctionName($reflectionParameter),
-                $namedTypeLower === 'stdclass' ? stdClass::class : 'object',
-            ));
+            ]);
         }
 
         if ($namedTypeLower === 'mixed' && ! $this->allowMixed) {
-            throw new JsonMapperException(sprintf(
-                'Parameter %s contains type "mixed" which is not allowed by default. ' .
-                'If you want to allow this, and receive the raw JSON value, set $allowMixed to true.',
-                $this->getParameterNameWithDeclaringFunctionName($reflectionParameter),
-            ));
+            throw new JsonMapperException([
+                sprintf(
+                    'Parameter %s contains type "mixed" which is not allowed by default.',
+                    $this->getParameterNameWithDeclaringFunctionName($reflectionParameter),
+                ),
+                'If you want to allow this, and receive the raw JSON value, set $allowMixed to true.'
+            ]);
         }
 
         if ($namedTypeLower === 'stdclass') {
