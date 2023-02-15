@@ -6,7 +6,7 @@ namespace Brick\JsonMapper\NameMapper;
 
 use Brick\JsonMapper\NameMapper;
 
-class SnakeCaseToCamelCaseMapper implements NameMapper
+final class SnakeCaseToCamelCaseMapper implements NameMapper
 {
     public function mapPropertyName(string $propertyName): string
     {

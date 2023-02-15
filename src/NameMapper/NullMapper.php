@@ -6,7 +6,7 @@ namespace Brick\JsonMapper\NameMapper;
 
 use Brick\JsonMapper\NameMapper;
 
-class NullMapper implements NameMapper
+final class NullMapper implements NameMapper
 {
     public function mapPropertyName(string $propertyName): string
     {
