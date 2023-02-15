@@ -154,7 +154,6 @@ final class JsonMapper
             }
         }
 
-        /** @psalm-suppress InvalidArgument https://github.com/vimeo/psalm/issues/9077 */
         return $reflectionClass->newInstanceArgs($parameters);
     }
 
