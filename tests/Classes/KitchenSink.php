@@ -259,6 +259,18 @@ final class KitchenSink
     }
 
     /**
+     * @param int[] $a
+     * @param string[] $ab
+     */
+    public function parameterNameThatStartsWithAnotherParametersName(
+        #[ExpectParameterType('int[]')]
+        array $a,
+        #[ExpectParameterType('string[]')]
+        array $ab,
+    ): void {
+    }
+
+    /**
      * @param (Countable&Traversable)|null $b
      */
     public function intersectionTypes(

@@ -146,7 +146,7 @@ final class Reflector
             return null;
         }
 
-        $pattern = '/@param(.*)\$' . $parameter->getName() . '/';
+        $pattern = '/@param(.*)\$' . $parameter->getName() . '\W/';
 
         /** @var list<array{string}> $matches */
         preg_match_all($pattern, $docComment, $matches, PREG_SET_ORDER);
