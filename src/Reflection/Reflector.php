@@ -148,8 +148,8 @@ final class Reflector
 
         $pattern = '/@param(.*)\$' . $parameter->getName() . '\W/';
 
-        /** @var list<array{string}> $matches */
         preg_match_all($pattern, $docComment, $matches, PREG_SET_ORDER);
+        /** @var list<list<string>> $matches */
 
         if (count($matches) === 0) {
             return null;
@@ -238,7 +238,7 @@ final class Reflector
         if ($type instanceof ReflectionUnionType) {
             return $this->createUnionType(
                 array_map(
-                    function (ReflectionNamedType|ReflectionIntersectionType $type) use ($reflectionParameter): SimpleType|ClassType|EnumType|ArrayType {
+                    function (ReflectionNamedType|ReflectionIntersectionType $type) use ($reflectionParameter): SimpleType|ClassType|EnumType {
                         /** @psalm-suppress DocblockTypeContradiction https://github.com/vimeo/psalm/issues/9079 */
                         if ($type instanceof ReflectionIntersectionType) {
                             $this->throwOnIntersectionType($reflectionParameter);
