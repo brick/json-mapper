@@ -6,13 +6,12 @@ namespace Brick\JsonMapper\Tests\Reflection;
 
 use Brick\JsonMapper\NameMapper;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class NameMapperTest extends TestCase
 {
-    /**
-     * @dataProvider providerNameMapper
-     */
+    #[DataProvider('providerNameMapper')]
     public function testNameMapper(NameMapper $nameMapper, string $propertyName, string $expected): void
     {
         self::assertSame($expected, $nameMapper->mapName($propertyName));

@@ -10,6 +10,7 @@ use Brick\JsonMapper\Tests\Attributes\ExpectException;
 use Brick\JsonMapper\Tests\Attributes\ExpectParameterType;
 use Brick\JsonMapper\Tests\Classes\KitchenSink;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -25,10 +26,9 @@ use ReflectionParameter;
 final class ReflectorTest extends TestCase
 {
     /**
-     * @dataProvider providerGetParameterType
-     *
      * @param Config $config
      */
+    #[DataProvider('providerGetParameterType')]
     public function testGetParameterType(ReflectionParameter $parameter, string $expectedType, array $config): void
     {
         $reflector = new Reflector(...$config);
@@ -55,10 +55,9 @@ final class ReflectorTest extends TestCase
     }
 
     /**
-     * @dataProvider providerGetParameterTypeThrowsException
-     *
      * @param Config $config
      */
+    #[DataProvider('providerGetParameterTypeThrowsException')]
     public function testGetParameterTypeThrowsException(ReflectionParameter $parameter, string $exceptionMessage, array $config): void
     {
         $reflector = new Reflector(...$config);
@@ -83,9 +82,7 @@ final class ReflectorTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider providerKitchenSinkMethodsHaveExpectations
-     */
+    #[DataProvider('providerKitchenSinkMethodsHaveExpectations')]
     public function testKitchenSinkMethodsHaveExpectations(ReflectionParameter $parameter): void
     {
         $attributes = array_merge(

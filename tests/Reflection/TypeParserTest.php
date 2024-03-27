@@ -6,13 +6,12 @@ namespace Brick\JsonMapper\Tests\Reflection;
 
 use Brick\JsonMapper\JsonMapperException;
 use Brick\JsonMapper\Reflection\TypeParser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class TypeParserTest extends TestCase
 {
-    /**
-     * @dataProvider providerParse
-     */
+    #[DataProvider('providerParse')]
     public function testParse(string $type, array $expected): void
     {
         $typeParser = new TypeParser($type);
@@ -50,9 +49,7 @@ final class TypeParserTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerParseInvalidType
-     */
+    #[DataProvider('providerParseInvalidType')]
     public function testParseInvalidType(string $type, string $exceptionMessage): void
     {
         $typeParser = new TypeParser($type);

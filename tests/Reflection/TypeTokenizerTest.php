@@ -7,13 +7,12 @@ namespace Brick\JsonMapper\Tests\Reflection;
 use Brick\JsonMapper\JsonMapperException;
 use Brick\JsonMapper\Reflection\TypeToken;
 use Brick\JsonMapper\Reflection\TypeTokenizer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class TypeTokenizerTest extends TestCase
 {
-    /**
-     * @dataProvider providerTokenize
-     */
+    #[DataProvider('providerTokenize')]
     public function testTokenize(string $type, array $expected): void
     {
         $tokens = array_map(
@@ -76,9 +75,7 @@ final class TypeTokenizerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerTokenizeInvalidType
-     */
+    #[DataProvider('providerTokenizeInvalidType')]
     public function testTokenizeInvalidType(string $type, string $exceptionMessage): void
     {
         self::expectException(JsonMapperException::class);
