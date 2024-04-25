@@ -3,8 +3,8 @@ name: CI
 on: [push, pull_request]
 
 env:
-  PSALM_PHP_VERSION: "8.2"
-  COVERAGE_PHP_VERSION: "8.2"
+  PSALM_PHP_VERSION: "8.3"
+  COVERAGE_PHP_VERSION: "8.3"
 
 jobs:
   psalm:
@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
