@@ -2,13 +2,13 @@
 
 <img src="https://raw.githubusercontent.com/brick/brick/master/logo.png" alt="" align="left" height="64">
 
-Maps JSON data to strongly typed PHP DTOs.
-
 [![Build Status](https://github.com/brick/json-mapper/workflows/CI/badge.svg)](https://github.com/brick/json-mapper/actions)
 [![Coverage Status](https://coveralls.io/repos/github/brick/json-mapper/badge.svg?branch=main)](https://coveralls.io/github/brick/json-mapper?branch=main)
 [![Latest Stable Version](https://poser.pugx.org/brick/json-mapper/v/stable)](https://packagist.org/packages/brick/json-mapper)
 [![Total Downloads](https://poser.pugx.org/brick/json-mapper/downloads)](https://packagist.org/packages/brick/json-mapper)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+
+Maps JSON data to strongly typed PHP DTOs.
 
 ## Introduction
 
