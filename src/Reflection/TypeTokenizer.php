@@ -41,8 +41,8 @@ final class TypeTokenizer
      */
     public static function tokenize(string $type): array
     {
-        /** @var list<array<int|string, array{string, int}>> $matches */
         preg_match_all(self::PATTERN, $type, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+        /** @var list<array<int|('namedType'|'symbol'|'whitespace'|'other'), array{string, int}>> $matches */
 
         $tokens = [];
 
