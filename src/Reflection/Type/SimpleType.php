@@ -11,9 +11,6 @@ use Stringable;
  */
 final class SimpleType implements Stringable
 {
-    /**
-     * @psalm-param 'int'|'float'|'string'|'bool'|'true'|'false'|'null'|'array'|'object'|'mixed' $type
-     */
     public function __construct(
         public readonly string $name,
     ) {

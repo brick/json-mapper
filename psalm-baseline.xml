@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.3.0@222dda8483516044c2ed7a4c3f197d7c9d6c3ddb">
+  <file src="src/NameMapper/CamelCaseToSnakeCaseMapper.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace_callback(
+            '/[A-Z]/',
+            fn (array $matches) => '_' . strtolower($matches[0]),
+            $name,
+        )]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/NameMapper/SnakeCaseToCamelCaseMapper.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace_callback(
+            '/_([a-z])/',
+            fn (array $matches) => strtoupper($matches[1]),
+            $name,
+        )]]></code>
+    </NullableReturnStatement>
+  </file>
+  <file src="src/Reflection/Reflector.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$type]]></code>
+    </PossiblyNullArgument>
+  </file>
+</files>
