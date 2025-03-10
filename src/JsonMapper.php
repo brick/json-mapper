@@ -106,7 +106,7 @@ final class JsonMapper
      *
      * @throws JsonMapperException
      */
-    private function mapToObject(stdClass $jsonData, string $className): object
+    public function mapToObject(stdClass $jsonData, string $className): object
     {
         try {
             $reflectionClass = new ReflectionClass($className);
