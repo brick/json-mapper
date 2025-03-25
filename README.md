@@ -9,6 +9,7 @@ Maps JSON data to strongly typed PHP DTOs.
 [![Latest Stable Version](https://poser.pugx.org/brick/json-mapper/v/stable)](https://packagist.org/packages/brick/json-mapper)
 [![Total Downloads](https://poser.pugx.org/brick/json-mapper/downloads)](https://packagist.org/packages/brick/json-mapper)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![libs.tech recommends](https://libs.tech/project/586985221/badge.svg)](https://libs.tech/project/586985221/json-mapper)
 
 ## Introduction
 
