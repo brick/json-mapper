@@ -6,6 +6,13 @@ namespace Brick\JsonMapper\Reflection;
 
 use Brick\JsonMapper\JsonMapperException;
 
+use function is_int;
+use function preg_match_all;
+use function sprintf;
+
+use const PREG_OFFSET_CAPTURE;
+use const PREG_SET_ORDER;
+
 /**
  * Splits a string into individual tokens.
  *
@@ -35,9 +42,9 @@ final class TypeTokenizer
     /**
      * @return TypeToken[]
      *
-     * @psalm-return list<TypeToken>
-     *
      * @throws JsonMapperException
+     *
+     * @psalm-return list<TypeToken>
      */
     public static function tokenize(string $type): array
     {
@@ -64,7 +71,7 @@ final class TypeTokenizer
                     throw new JsonMapperException(match ($value) {
                         '[' => sprintf('Char "[" is not followed by "]" at offset %d.', $offset),
                         ']' => sprintf('Char "]" is not preceded by "[" at offset %d.', $offset),
-                        default => sprintf('Unexpected "%s" at offset %d.',  $value, $offset),
+                        default => sprintf('Unexpected "%s" at offset %d.', $value, $offset),
                     });
                 }
 

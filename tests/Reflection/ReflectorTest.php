@@ -16,6 +16,10 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionParameter;
 
+use function array_map;
+use function array_merge;
+use function sprintf;
+
 /**
  * @psalm-type Config = array{
  *     allowUntypedArrays?: true,

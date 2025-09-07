@@ -6,6 +6,9 @@ namespace Brick\JsonMapper;
 
 use Exception;
 
+use function implode;
+use function is_string;
+
 final class JsonMapperException extends Exception
 {
     /**

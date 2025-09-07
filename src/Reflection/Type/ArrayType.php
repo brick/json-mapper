@@ -6,6 +6,8 @@ namespace Brick\JsonMapper\Reflection\Type;
 
 use Stringable;
 
+use function count;
+
 /**
  * @internal This class is not part of the public API, and may change without notice.
  */

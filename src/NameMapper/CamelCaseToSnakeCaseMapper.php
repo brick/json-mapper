@@ -6,6 +6,9 @@ namespace Brick\JsonMapper\NameMapper;
 
 use Brick\JsonMapper\NameMapper;
 
+use function preg_replace_callback;
+use function strtolower;
+
 final class CamelCaseToSnakeCaseMapper implements NameMapper
 {
     public function mapName(string $name): string

@@ -10,6 +10,8 @@ use Brick\JsonMapper\Reflection\TypeTokenizer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+use function array_map;
+
 final class TypeTokenizerTest extends TestCase
 {
     #[DataProvider('providerTokenize')]

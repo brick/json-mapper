@@ -7,6 +7,16 @@ namespace Brick\JsonMapper\Reflection\Type;
 use Brick\JsonMapper\JsonMapperException;
 use Stringable;
 
+use function array_count_values;
+use function array_filter;
+use function array_map;
+use function array_unique;
+use function array_values;
+use function count;
+use function implode;
+use function in_array;
+use function sprintf;
+
 /**
  * Represents a combination of supported types.
  * For simplicity, even a single type is represented as a union type with a single element.
@@ -16,13 +26,21 @@ use Stringable;
 final class UnionType implements Stringable
 {
     public readonly bool $allowsInt;
+
     public readonly bool $allowsFloat;
+
     public readonly bool $allowsString;
+
     public readonly bool $allowsTrue;
+
     public readonly bool $allowsFalse;
+
     public readonly bool $allowsNull;
+
     public readonly bool $allowsRawArray;
+
     public readonly bool $allowsRawObject;
+
     public readonly bool $allowsMixed;
 
     /**
@@ -146,6 +164,14 @@ final class UnionType implements Stringable
         }
     }
 
+    public function __toString(): string
+    {
+        return implode('|', array_map(
+            fn (Stringable $value) => (string) $value,
+            $this->types,
+        ));
+    }
+
     private function ensureNotEmpty(): void
     {
         if (! $this->types) {
@@ -181,14 +207,6 @@ final class UnionType implements Stringable
         return array_values(array_filter(
             $this->types,
             fn (SimpleType|ClassType|EnumType|ArrayType $type) => $type instanceof $className,
-        ));
-    }
-
-    public function __toString(): string
-    {
-        return implode('|', array_map(
-            fn (Stringable $value) => (string) $value,
-            $this->types,
         ));
     }
 }

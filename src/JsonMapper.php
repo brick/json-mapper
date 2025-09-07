@@ -14,6 +14,22 @@ use ReflectionException;
 use ReflectionParameter;
 use stdClass;
 
+use function array_map;
+use function count;
+use function get_class;
+use function gettype;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_float;
+use function is_int;
+use function is_string;
+use function json_decode;
+use function property_exists;
+use function sprintf;
+
+use const JSON_THROW_ON_ERROR;
+
 /**
  * @psalm-suppress MixedAssignment
  */
@@ -167,7 +183,7 @@ final class JsonMapper
     ): mixed {
         $parameterType = $this->reflector->getParameterType($reflectionParameter);
 
-        if (!property_exists($jsonData, $jsonPropertyName)) {
+        if (! property_exists($jsonData, $jsonPropertyName)) {
             if ($this->onMissingProperties === OnMissingProperties::SET_NULL) {
                 if ($parameterType->allowsNull) {
                     return null;
@@ -188,7 +204,7 @@ final class JsonMapper
                     OnMissingProperties::SET_NULL => 'The parameter does not allow null.',
                     OnMissingProperties::SET_DEFAULT => 'The parameter does not have a default value.',
                     OnMissingProperties::THROW_EXCEPTION => 'If you want to allow missing properties, change the $onMissingProperties option.',
-                }
+                },
             ]);
         }
 
@@ -328,11 +344,14 @@ final class JsonMapper
 
         if (! $matches) {
             throw new JsonMapperException(
-                "JSON object does not match any of the allowed PHP classes:\n" . implode("\n", array_map(
-                    fn (array $error) => sprintf(' - %s: %s', ...$error),
-                    $errors,
+                "JSON object does not match any of the allowed PHP classes:\n" . implode(
+                    "\n",
+                    array_map(
+                        fn (array $error) => sprintf(' - %s: %s', ...$error),
+                        $errors,
+                    ),
                 ),
-            ));
+            );
         }
 
         if (count($matches) === 1) {

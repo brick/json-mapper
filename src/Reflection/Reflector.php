@@ -22,6 +22,20 @@ use ReflectionUnionType;
 use stdClass;
 use UnitEnum;
 
+use function array_map;
+use function count;
+use function implode;
+use function in_array;
+use function is_a;
+use function is_string;
+use function preg_match;
+use function preg_match_all;
+use function preg_replace;
+use function sprintf;
+use function strtolower;
+
+use const PREG_SET_ORDER;
+
 /**
  * @internal This class is not part of the public API, and may change without notice.
  */
@@ -50,13 +64,6 @@ final class Reflector
         'callable',
     ];
 
-    public function __construct(
-        public readonly bool $allowUntypedArrays = false,
-        public readonly bool $allowUntypedObjects = false,
-        public readonly bool $allowMixed = false,
-    ) {
-    }
-
     /**
      * Cache of parameter types, indexed by cache key.
      *
@@ -66,6 +73,13 @@ final class Reflector
      * @var array<string, UnionType>
      */
     private array $parameterTypes = [];
+
+    public function __construct(
+        public readonly bool $allowUntypedArrays = false,
+        public readonly bool $allowUntypedObjects = false,
+        public readonly bool $allowMixed = false,
+    ) {
+    }
 
     /**
      * @throws JsonMapperException
@@ -321,7 +335,7 @@ final class Reflector
                     'Parameter %s contains type "mixed" which is not allowed by default.',
                     $this->getParameterNameWithDeclaringFunctionName($reflectionParameter),
                 ),
-                'If you want to allow this, and receive the raw JSON value, set $allowMixed to true.'
+                'If you want to allow this, and receive the raw JSON value, set $allowMixed to true.',
             ]);
         }
 

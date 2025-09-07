@@ -6,6 +6,14 @@ namespace Brick\JsonMapper\Reflection;
 
 use Brick\JsonMapper\JsonMapperException;
 
+use function array_map;
+use function array_merge;
+use function count;
+use function implode;
+use function in_array;
+use function is_array;
+use function sprintf;
+
 /**
  * Parses the given string and returns a nested representation of the types.
  *
@@ -29,7 +37,6 @@ final class TypeParser
 {
     /**
      * @var TypeToken[]
-     *
      * @psalm-var list<TypeToken>
      */
     private array $tokens = [];
@@ -67,7 +74,7 @@ final class TypeParser
     {
         $values = [];
 
-        for (;;) {
+        for (; ;) {
             $value = $this->parseValue();
 
             if ($this->isNextToken('[]')) {
@@ -96,6 +103,7 @@ final class TypeParser
 
             if ($peekToken->value === '|') {
                 $this->advance();
+
                 continue;
             }
 
@@ -186,7 +194,7 @@ final class TypeParser
      */
     private function failExpectation(array $expected, ?TypeToken $actual): never
     {
-        $expected = implode(' or ' , array_map(
+        $expected = implode(' or ', array_map(
             fn (string $value) => in_array($value, ['(', ')', '|', '[]'], true) ? "\"$value\"" : $value,
             $expected,
         ));

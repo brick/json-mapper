@@ -17,7 +17,6 @@ use Brick\JsonMapper\Tests\Classes\Shop\OrderReport;
 use Brick\JsonMapper\Tests\Classes\Shop\OrderStatus;
 use Brick\JsonMapper\Tests\Classes\Shop\Person;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 final class JsonMapperTest extends TestCase
 {
