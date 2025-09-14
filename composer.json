@@ -1,6 +1,6 @@
 {
-  "name": "brick/json-mapper",
-  "description": "Maps JSON data to strongly typed PHP DTOs",
+  "name": "wencagh/json-mapper",
+  "description": "Maps JSON data to strongly typed PHP DTOs - fork of brick/json-mapper",
   "type": "library",
   "keywords": [
     "Brick",
