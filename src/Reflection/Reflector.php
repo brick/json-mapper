@@ -253,7 +253,6 @@ final class Reflector
             return $this->createUnionType(
                 array_map(
                     function (ReflectionNamedType|ReflectionIntersectionType $type) use ($reflectionParameter): SimpleType|ClassType|EnumType|ArrayType {
-                        /** @psalm-suppress DocblockTypeContradiction https://github.com/vimeo/psalm/issues/9079 */
                         if ($type instanceof ReflectionIntersectionType) {
                             $this->throwOnIntersectionType($reflectionParameter);
                         }
