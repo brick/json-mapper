@@ -6,6 +6,7 @@ namespace Brick\JsonMapper\Reflection\Type;
 
 use BackedEnum;
 use InvalidArgumentException;
+use Override;
 use Stringable;
 
 /**
@@ -26,6 +27,7 @@ final class EnumType implements Stringable
         }
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->name;

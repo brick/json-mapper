@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brick\JsonMapper\Reflection\Type;
 
 use Brick\JsonMapper\JsonMapperException;
+use Override;
 use Stringable;
 
 use function array_count_values;
@@ -164,6 +165,7 @@ final class UnionType implements Stringable
         }
     }
 
+    #[Override]
     public function __toString(): string
     {
         return implode('|', array_map(

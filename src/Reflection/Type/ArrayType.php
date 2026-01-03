@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brick\JsonMapper\Reflection\Type;
 
+use Override;
 use Stringable;
 
 use function count;
@@ -21,6 +22,7 @@ final class ArrayType implements Stringable
     /**
      * @psalm-suppress ImplicitToStringCast
      */
+    #[Override]
     public function __toString(): string
     {
         if (count($this->type->types) === 1) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Brick\JsonMapper\Reflection\Type;
 
+use Override;
 use Stringable;
 
 /**
@@ -19,6 +20,7 @@ final class ClassType implements Stringable
     ) {
     }
 
+    #[Override]
     public function __toString(): string
     {
         return $this->name;
