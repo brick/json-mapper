@@ -40,7 +40,6 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "8.1"
           - "8.2"
           - "8.3"
           - "8.4"
@@ -48,7 +47,7 @@ jobs:
         deps:
           - "highest"
         include:
-          - php-version: "8.1"
+          - php-version: "8.2"
             deps: "lowest"
 
     steps:
