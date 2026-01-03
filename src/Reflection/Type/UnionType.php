@@ -24,42 +24,42 @@ use function sprintf;
  *
  * @internal This class is not part of the public API, and may change without notice.
  */
-final class UnionType implements Stringable
+final readonly class UnionType implements Stringable
 {
-    public readonly bool $allowsInt;
+    public bool $allowsInt;
 
-    public readonly bool $allowsFloat;
+    public bool $allowsFloat;
 
-    public readonly bool $allowsString;
+    public bool $allowsString;
 
-    public readonly bool $allowsTrue;
+    public bool $allowsTrue;
 
-    public readonly bool $allowsFalse;
+    public bool $allowsFalse;
 
-    public readonly bool $allowsNull;
+    public bool $allowsNull;
 
-    public readonly bool $allowsRawArray;
+    public bool $allowsRawArray;
 
-    public readonly bool $allowsRawObject;
+    public bool $allowsRawObject;
 
-    public readonly bool $allowsMixed;
+    public bool $allowsMixed;
 
     /**
      * @var ClassType[]
      */
-    public readonly array $classTypes;
+    public array $classTypes;
 
     /**
      * At most one enum type per backed type (int, string) is allowed in a union.
      *
      * @var EnumType[]
      */
-    public readonly array $enumTypes;
+    public array $enumTypes;
 
     /**
      * At most one ArrayType is allowed in a union.
      */
-    public readonly ?ArrayType $arrayType;
+    public ?ArrayType $arrayType;
 
     /**
      * @param (SimpleType|ClassType|EnumType|ArrayType)[] $types
@@ -67,7 +67,7 @@ final class UnionType implements Stringable
      * @throws JsonMapperException
      */
     public function __construct(
-        public readonly array $types,
+        public array $types,
     ) {
         $this->ensureNotEmpty();
         $this->ensureNoDuplicateTypes();

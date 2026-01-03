@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Brick\JsonMapper\Tests\Classes\Shop;
 
-final class Company
+final readonly class Company
 {
     public function __construct(
-        public readonly int $id,
-        public readonly string $name,
-        public readonly string $companyNumber,
+        public int $id,
+        public string $name,
+        public string $companyNumber,
     ) {
     }
 }

@@ -44,7 +44,7 @@ final class TypeParser
     private int $pointer = 0;
 
     public function __construct(
-        private string $type,
+        private readonly string $type,
     ) {
     }
 

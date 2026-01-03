@@ -12,10 +12,10 @@ use function count;
 /**
  * @internal This class is not part of the public API, and may change without notice.
  */
-final class ArrayType implements Stringable
+final readonly class ArrayType implements Stringable
 {
     public function __construct(
-        public readonly UnionType $type,
+        public UnionType $type,
     ) {
     }
 

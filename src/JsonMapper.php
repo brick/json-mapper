@@ -33,9 +33,9 @@ use const JSON_THROW_ON_ERROR;
 /**
  * @psalm-suppress MixedAssignment
  */
-final class JsonMapper
+final readonly class JsonMapper
 {
-    private readonly Reflector $reflector;
+    private Reflector $reflector;
 
     public function __construct(
         /**
@@ -61,26 +61,26 @@ final class JsonMapper
          * Extra properties are properties of the JSON object that do not have a corresponding constructor parameter in
          * the PHP class.
          */
-        private readonly OnExtraProperties $onExtraProperties = OnExtraProperties::THROW_EXCEPTION,
+        private OnExtraProperties $onExtraProperties = OnExtraProperties::THROW_EXCEPTION,
 
         /**
          * Controls how missing properties in the JSON object are handled.
          * Missing properties are constructor parameters in the PHP class that do not have a corresponding property in
          * the JSON object.
          */
-        private readonly OnMissingProperties $onMissingProperties = OnMissingProperties::THROW_EXCEPTION,
+        private OnMissingProperties $onMissingProperties = OnMissingProperties::THROW_EXCEPTION,
 
         /**
          * Mapper to convert JSON property names to PHP property names.
          * By default, no conversion is performed.
          */
-        private readonly NameMapper $jsonToPhpNameMapper = new NullMapper(),
+        private NameMapper $jsonToPhpNameMapper = new NullMapper(),
 
         /**
          * Mapper to convert PHP property names to JSON property names.
          * By default, no conversion is performed.
          */
-        private readonly NameMapper $phpToJsonNameMapper = new NullMapper(),
+        private NameMapper $phpToJsonNameMapper = new NullMapper(),
     ) {
         $this->reflector = new Reflector(
             $allowUntypedArrays,

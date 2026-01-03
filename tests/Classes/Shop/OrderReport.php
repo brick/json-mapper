@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Brick\JsonMapper\Tests\Classes\Shop;
 
-final class OrderReport
+final readonly class OrderReport
 {
     /**
      * @param (Person|Company)[] $customers
      */
     public function __construct(
-        public readonly array $customers,
-        public readonly int $numberOfOrders,
-        public readonly float $totalAmount,
+        public array $customers,
+        public int $numberOfOrders,
+        public float $totalAmount,
     ) {
     }
 }

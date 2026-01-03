@@ -7,7 +7,7 @@ namespace Brick\JsonMapper\Tests\Attributes;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PARAMETER)]
-final class ExpectException
+final readonly class ExpectException
 {
     /**
      * @param array{
@@ -17,9 +17,9 @@ final class ExpectException
      * } $config
      */
     public function __construct(
-        public readonly string $message,
-        public readonly array $config = [],
-        public readonly ?int $maxPhpVersionId = null,
+        public string $message,
+        public array $config = [],
+        public ?int $maxPhpVersionId = null,
     ) {
     }
 }
