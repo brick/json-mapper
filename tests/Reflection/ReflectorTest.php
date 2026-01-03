@@ -20,6 +20,8 @@ use function array_map;
 use function array_merge;
 use function sprintf;
 
+use const PHP_VERSION_ID;
+
 /**
  * @psalm-type Config = array{
  *     allowUntypedArrays?: true,
@@ -62,18 +64,26 @@ final class ReflectorTest extends TestCase
      * @param Config $config
      */
     #[DataProvider('providerGetParameterTypeThrowsException')]
-    public function testGetParameterTypeThrowsException(ReflectionParameter $parameter, string $exceptionMessage, array $config): void
+    public function testGetParameterTypeThrowsException(ReflectionParameter $parameter, string $exceptionMessage, array $config, ?int $maxPhpVersionId): void
     {
         $reflector = new Reflector(...$config);
 
-        $this->expectException(JsonMapperException::class);
-        $this->expectExceptionMessage($exceptionMessage);
+        $shouldThrow = $maxPhpVersionId === null || PHP_VERSION_ID <= $maxPhpVersionId;
+
+        if ($shouldThrow) {
+            $this->expectException(JsonMapperException::class);
+            $this->expectExceptionMessage($exceptionMessage);
+        }
 
         $reflector->getParameterType($parameter);
+
+        if (! $shouldThrow) {
+            self::assertTrue(true);
+        }
     }
 
     /**
-     * @return Generator<string, array{ReflectionParameter, string, Config}>
+     * @return Generator<string, array{ReflectionParameter, string, Config, ?int}>
      */
     public static function providerGetParameterTypeThrowsException(): Generator
     {
@@ -81,7 +91,7 @@ final class ReflectorTest extends TestCase
             $attributes = self::getAttributes($parameter, ExpectException::class);
 
             foreach ($attributes as $attribute) {
-                yield $parameterIdentifier => [$parameter, $attribute->message, $attribute->config];
+                yield $parameterIdentifier => [$parameter, $attribute->message, $attribute->config, $attribute->maxPhpVersionId];
             }
         }
     }

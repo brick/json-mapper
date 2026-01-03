@@ -19,6 +19,7 @@ final class ExpectException
     public function __construct(
         public readonly string $message,
         public readonly array $config = [],
+        public readonly ?int $maxPhpVersionId = null,
     ) {
     }
 }

@@ -209,7 +209,7 @@ final class KitchenSink
      * @param never $e
      */
     public function disallowedBuiltinTypes(
-        #[ExpectException('Parameter $a of Brick\JsonMapper\Tests\Classes\KitchenSink::disallowedBuiltinTypes() contains type "self" which is not allowed.')]
+        #[ExpectException('Parameter $a of Brick\JsonMapper\Tests\Classes\KitchenSink::disallowedBuiltinTypes() contains type "self" which is not allowed.', maxPhpVersionId: 80499)]
         self $a,
 
         #[ExpectException('Parameter $b of Brick\JsonMapper\Tests\Classes\KitchenSink::disallowedBuiltinTypes() contains type "static" which is not allowed.')]
