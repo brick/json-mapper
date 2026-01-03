@@ -18,6 +18,9 @@ final class ArrayType implements Stringable
     ) {
     }
 
+    /**
+     * @psalm-suppress ImplicitToStringCast
+     */
     public function __toString(): string
     {
         if (count($this->type->types) === 1) {
