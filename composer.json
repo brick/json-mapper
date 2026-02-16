@@ -11,7 +11,7 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
-    "brick/reflection": "~0.5.0"
+    "brick/reflection": "~0.7.0"
   },
   "require-dev": {
     "php-coveralls/php-coveralls": "^2.5",
