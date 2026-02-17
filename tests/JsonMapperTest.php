@@ -147,7 +147,7 @@ final class JsonMapperTest extends TestCase
             }
             JSON;
 
-        $jsonMapper = new JsonMapper(onExtraProperties: OnExtraProperties::IGNORE);
+        $jsonMapper = new JsonMapper(onExtraProperties: OnExtraProperties::Ignore);
         $artist = $jsonMapper->map($json, Artist::class);
 
         self::assertInstanceOf(Artist::class, $artist);
@@ -186,7 +186,7 @@ final class JsonMapperTest extends TestCase
             }
             JSON;
 
-        $jsonMapper = new JsonMapper(onMissingProperties: OnMissingProperties::SET_NULL);
+        $jsonMapper = new JsonMapper(onMissingProperties: OnMissingProperties::SetNull);
         $artist = $jsonMapper->map($json, Artist::class);
 
         self::assertInstanceOf(Artist::class, $artist);
@@ -205,7 +205,7 @@ final class JsonMapperTest extends TestCase
             }
             JSON;
 
-        $jsonMapper = new JsonMapper(onMissingProperties: OnMissingProperties::SET_DEFAULT);
+        $jsonMapper = new JsonMapper(onMissingProperties: OnMissingProperties::SetDefault);
         $artist = $jsonMapper->map($json, Artist::class);
 
         self::assertInstanceOf(Artist::class, $artist);

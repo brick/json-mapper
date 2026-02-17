@@ -331,11 +331,11 @@ The `JsonMapper` constructor accepts the following options:
 
   This option accepts an `OnExtraProperties` enum value, and controls how `JsonMapper` reacts if a JSON object contains a property that does not have a matching parameter in the corresponding DTO's constructor signature:
 
-  - **`OnExtraProperties::THROW_EXCEPTION`**
+  - **`OnExtraProperties::ThrowException`**
 
     `JsonMapper` will throw a `JsonMapperException`. This is the default value.
 
-  - **`OnExtraProperties::IGNORE`**
+  - **`OnExtraProperties::Ignore`**
 
     `JsonMapper` will ignore any extra properties:
 
@@ -360,7 +360,7 @@ The `JsonMapper` constructor accepts the following options:
     }';
     
     $mapper = new JsonMapper(
-        onExtraProperties: OnExtraProperties::IGNORE,
+        onExtraProperties: OnExtraProperties::Ignore,
     );
     
     // extra properties "extraProperty" and "otherExtraProperty" are ignored,
@@ -372,11 +372,11 @@ The `JsonMapper` constructor accepts the following options:
 
   This option accepts an `OnMissingProperties` enum value, and controls how `JsonMapper` reacts if a JSON object is missing a property that is declared in the corresponding DTO's constructor signature:
 
-  - **`OnMissingProperties::THROW_EXCEPTION`**
+  - **`OnMissingProperties::ThrowException`**
 
     `JsonMapper` will throw a `JsonMapperException`. This is the default value.
 
-  - **`OnMissingProperties::SET_NULL`**
+  - **`OnMissingProperties::SetNull`**
   
     `JsonMapper` will set the parameter to `null` if the JSON property is missing and the parameter is nullable:
 
@@ -398,7 +398,7 @@ The `JsonMapper` constructor accepts the following options:
     }';
     
     $mapper = new JsonMapper(
-        onMissingProperties: OnMissingProperties::SET_NULL,
+        onMissingProperties: OnMissingProperties::SetNull,
     );
     
     $order = $mapper->map($json, Order::class);
@@ -407,10 +407,10 @@ The `JsonMapper` constructor accepts the following options:
 
     If the property is missing and the parameter is not nullable, an exception will be thrown regardless of this option.
 
-  - **`OnMissingProperties::SET_DEFAULT`**
+  - **`OnMissingProperties::SetDefault`**
 
     `JsonMapper` will set the parameter to its default value if the JSON property is missing and the parameter has a default value:
-    
+
     ```php
     use Brick\JsonMapper\JsonMapper;
     use Brick\JsonMapper\OnMissingProperties;
@@ -429,7 +429,7 @@ The `JsonMapper` constructor accepts the following options:
     }';
     
     $mapper = new JsonMapper(
-        onMissingProperties: OnMissingProperties::SET_DEFAULT,
+        onMissingProperties: OnMissingProperties::SetDefault,
     );
     
     $order = $mapper->map($json, Order::class);

@@ -6,6 +6,16 @@ namespace Brick\JsonMapper;
 
 enum OnExtraProperties
 {
-    case THROW_EXCEPTION;
-    case IGNORE;
+    case ThrowException;
+    case Ignore;
+
+    /**
+     * @deprecated Use OnExtraProperties::ThrowException
+     */
+    public const THROW_EXCEPTION = self::ThrowException;
+
+    /**
+     * @deprecated Use OnExtraProperties::Ignore
+     */
+    public const IGNORE = self::Ignore;
 }

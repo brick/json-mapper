@@ -6,7 +6,22 @@ namespace Brick\JsonMapper;
 
 enum OnMissingProperties
 {
-    case THROW_EXCEPTION;
-    case SET_NULL;
-    case SET_DEFAULT;
+    case ThrowException;
+    case SetNull;
+    case SetDefault;
+
+    /**
+     * @deprecated Use OnMissingProperties::ThrowException
+     */
+    public const THROW_EXCEPTION = self::ThrowException;
+
+    /**
+     * @deprecated Use OnMissingProperties::SetNull
+     */
+    public const SET_NULL = self::SetNull;
+
+    /**
+     * @deprecated Use OnMissingProperties::SetDefault
+     */
+    public const SET_DEFAULT = self::SetDefault;
 }

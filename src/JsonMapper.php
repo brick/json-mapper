@@ -61,14 +61,14 @@ final readonly class JsonMapper
          * Extra properties are properties of the JSON object that do not have a corresponding constructor parameter in
          * the PHP class.
          */
-        private OnExtraProperties $onExtraProperties = OnExtraProperties::THROW_EXCEPTION,
+        private OnExtraProperties $onExtraProperties = OnExtraProperties::ThrowException,
 
         /**
          * Controls how missing properties in the JSON object are handled.
          * Missing properties are constructor parameters in the PHP class that do not have a corresponding property in
          * the JSON object.
          */
-        private OnMissingProperties $onMissingProperties = OnMissingProperties::THROW_EXCEPTION,
+        private OnMissingProperties $onMissingProperties = OnMissingProperties::ThrowException,
 
         /**
          * Mapper to convert JSON property names to PHP property names.
@@ -151,7 +151,7 @@ final readonly class JsonMapper
             );
         }
 
-        if ($this->onExtraProperties === OnExtraProperties::THROW_EXCEPTION) {
+        if ($this->onExtraProperties === OnExtraProperties::ThrowException) {
             /** @psalm-suppress MixedAssignment, RawObjectIteration */
             foreach ($jsonData as $jsonPropertyName => $_) {
                 /** @var string $jsonPropertyName https://github.com/vimeo/psalm/issues/9108 */
@@ -184,13 +184,13 @@ final readonly class JsonMapper
         $parameterType = $this->reflector->getParameterType($reflectionParameter);
 
         if (! property_exists($jsonData, $jsonPropertyName)) {
-            if ($this->onMissingProperties === OnMissingProperties::SET_NULL) {
+            if ($this->onMissingProperties === OnMissingProperties::SetNull) {
                 if ($parameterType->allowsNull) {
                     return null;
                 }
             }
 
-            if ($this->onMissingProperties === OnMissingProperties::SET_DEFAULT) {
+            if ($this->onMissingProperties === OnMissingProperties::SetDefault) {
                 if ($reflectionParameter->isDefaultValueAvailable()) {
                     // TODO we should technically check if the default value is compatible with the parameter type,
                     //      as the type declared as @param may be more specific than the PHP type.
@@ -201,9 +201,9 @@ final readonly class JsonMapper
             throw new JsonMapperException([
                 sprintf('Missing property "%s" in JSON data.', $jsonPropertyName),
                 match ($this->onMissingProperties) {
-                    OnMissingProperties::SET_NULL => 'The parameter does not allow null.',
-                    OnMissingProperties::SET_DEFAULT => 'The parameter does not have a default value.',
-                    OnMissingProperties::THROW_EXCEPTION => 'If you want to allow missing properties, change the $onMissingProperties option.',
+                    OnMissingProperties::SetNull => 'The parameter does not allow null.',
+                    OnMissingProperties::SetDefault => 'The parameter does not have a default value.',
+                    OnMissingProperties::ThrowException => 'If you want to allow missing properties, change the $onMissingProperties option.',
                 },
             ]);
         }
