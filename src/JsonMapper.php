@@ -258,6 +258,12 @@ final readonly class JsonMapper
                 }
             }
 
+           foreach ($parameterType->types as $type) {
+               if ($type->name == \DateTime::class) {
+                   return new \DateTime($jsonValue);
+                }
+           }
+
             // TODO "Parameter %s of class %s does not accept string" + JSON path
             throw new JsonMapperException('Property ' . $jsonPropertyName . ' cannot be a string.');
         }
