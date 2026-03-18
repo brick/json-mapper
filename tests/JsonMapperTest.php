@@ -47,7 +47,6 @@ final class JsonMapperTest extends TestCase
         $this->expectException(JsonMapperException::class);
         $this->expectExceptionMessage('Invalid class name: Brick\JsonMapper\Tests\Reflection\InvalidClassName');
 
-        /** @psalm-suppress UndefinedClass */
         $jsonMapper->map('{}', InvalidClassName::class);
     }
 
