@@ -7,6 +7,7 @@ namespace Brick\JsonMapper\NameMapper;
 use Brick\JsonMapper\NameMapper;
 use Override;
 
+use function assert;
 use function preg_replace_callback;
 use function strtolower;
 

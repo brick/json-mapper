@@ -23,6 +23,7 @@ use stdClass;
 use UnitEnum;
 
 use function array_map;
+use function assert;
 use function count;
 use function implode;
 use function in_array;
