@@ -162,7 +162,6 @@ final class Reflector
 
         $pattern = '/@param(.*)\$' . $parameter->getName() . '\W/';
 
-        /** @var list<array{string}> $matches */
         preg_match_all($pattern, $docComment, $matches, PREG_SET_ORDER);
 
         if (count($matches) === 0) {
@@ -186,6 +185,7 @@ final class Reflector
         }
 
         $type = preg_replace('/(^\s+)|(\s+$)/', '', $type);
+        assert($type !== null);
 
         if ($type === '') {
             throw new JsonMapperException(sprintf(
@@ -208,6 +208,7 @@ final class Reflector
 
         return $this->createUnionType(
             array_map(
+                // @phpstan-ignore argument.type
                 fn (string|array $value) => $this->convertDocCommentType($value, $parameter),
                 $parsedType,
             ),
@@ -232,6 +233,7 @@ final class Reflector
         return new ArrayType(
             $this->createUnionType(
                 array_map(
+                    // @phpstan-ignore argument.type
                     fn (string|array $type) => $this->convertDocCommentType($type, $reflectionParameter),
                     $type,
                 ),
@@ -252,7 +254,7 @@ final class Reflector
         if ($type instanceof ReflectionUnionType) {
             return $this->createUnionType(
                 array_map(
-                    function (ReflectionNamedType|ReflectionIntersectionType $type) use ($reflectionParameter): SimpleType|ClassType|EnumType|ArrayType {
+                    function (ReflectionNamedType|ReflectionIntersectionType $type) use ($reflectionParameter): SimpleType|ClassType|EnumType {
                         if ($type instanceof ReflectionIntersectionType) {
                             $this->throwOnIntersectionType($reflectionParameter);
                         }
@@ -375,7 +377,7 @@ final class Reflector
             );
         }
 
-        /** @psalm-var class-string $namedType */
+        /** @var class-string $namedType */
         return new Type\ClassType($namedType);
     }
 

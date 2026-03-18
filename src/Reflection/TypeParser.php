@@ -36,8 +36,7 @@ use function sprintf;
 final class TypeParser
 {
     /**
-     * @var TypeToken[]
-     * @psalm-var list<TypeToken>
+     * @var list<TypeToken>
      */
     private array $tokens = [];
 

@@ -15,10 +15,14 @@ final class SnakeCaseToCamelCaseMapper implements NameMapper
     #[Override]
     public function mapName(string $name): string
     {
-        return preg_replace_callback(
+        $result = preg_replace_callback(
             '/_([a-z])/',
             fn (array $matches) => strtoupper($matches[1]),
             $name,
         );
+
+        assert($result !== null);
+
+        return $result;
     }
 }

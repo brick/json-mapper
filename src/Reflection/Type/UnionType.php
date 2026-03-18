@@ -156,6 +156,7 @@ final readonly class UnionType implements Stringable
             throw new JsonMapperException('Type contains both "true" and "false", "bool" should be used instead.');
         }
 
+        // @phpstan-ignore booleanAnd.alwaysFalse, notIdentical.alwaysFalse
         if ($hasArray && $this->arrayType !== null) {
             throw new JsonMapperException('Cannot use untyped "array" together with a typed array "[]" in a union.');
         }

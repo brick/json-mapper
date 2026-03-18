@@ -19,9 +19,6 @@ final readonly class ArrayType implements Stringable
     ) {
     }
 
-    /**
-     * @psalm-suppress ImplicitToStringCast
-     */
     #[Override]
     public function __toString(): string
     {

@@ -30,9 +30,6 @@ use function sprintf;
 
 use const JSON_THROW_ON_ERROR;
 
-/**
- * @psalm-suppress MixedAssignment
- */
 final readonly class JsonMapper
 {
     private Reflector $reflector;
@@ -126,7 +123,7 @@ final readonly class JsonMapper
     {
         try {
             $reflectionClass = new ReflectionClass($className);
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException $e) { // @phpstan-ignore catch.neverThrown
             throw new JsonMapperException('Invalid class name: ' . $className, $e);
         }
 
@@ -152,9 +149,8 @@ final readonly class JsonMapper
         }
 
         if ($this->onExtraProperties === OnExtraProperties::ThrowException) {
-            /** @psalm-suppress MixedAssignment, RawObjectIteration */
-            foreach ($jsonData as $jsonPropertyName => $_) {
-                /** @var string $jsonPropertyName https://github.com/vimeo/psalm/issues/9108 */
+            foreach ($jsonData as $jsonPropertyName => $_) { // @phpstan-ignore foreach.nonIterable
+                /** @var string $jsonPropertyName */
                 if (! in_array($jsonPropertyName, $consumedJsonPropertyNames, true)) {
                     throw new JsonMapperException([
                         sprintf(

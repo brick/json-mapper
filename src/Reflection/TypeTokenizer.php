@@ -40,15 +40,12 @@ final class TypeTokenizer
         . '/';
 
     /**
-     * @return TypeToken[]
+     * @return list<TypeToken>
      *
      * @throws JsonMapperException
-     *
-     * @psalm-return list<TypeToken>
      */
     public static function tokenize(string $type): array
     {
-        /** @var list<array<int|string, array{string, int}>> $matches */
         preg_match_all(self::PATTERN, $type, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
         $tokens = [];

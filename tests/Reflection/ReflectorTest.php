@@ -23,7 +23,7 @@ use function sprintf;
 use const PHP_VERSION_ID;
 
 /**
- * @psalm-type Config = array{
+ * @phpstan-type Config array{
  *     allowUntypedArrays?: true,
  *     allowUntypedObjects?: true,
  *     allowMixed?: true,
